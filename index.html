@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+
+<body>
+    <div class="collage_with_dogs"></div>
+    <div class="table">
+        <table id="headerTable">
+            <thead>
+                <tr>
+                    <th onclick="sort('id')">ID</th>
+                    <th onclick="sort('username')">Логин</th>
+                    <th onclick="sort('email')">Email</th>
+                    <th onclick="sort('fullName')">ФИО</th>
+                    <th onclick="sort('birthDate')">Дата рождения</th>
+                    <th onclick="sort('height')">Рост</th>
+                    <th onclick="sort('ip')">IP-Адрес</th>
+                </tr>
+            </thead>
+            <tbody id="bodyTable"></tbody>
+        </table>
+        <div class="arrows">
+            <div class="arrow-prev">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="18" viewBox="0 0 13 18" fill="none">
+                    <path
+                        d="M0.749921 9.00004C0.749785 8.89258 0.775601 8.78616 0.825883 8.68689C0.876164 8.58762 0.949921 8.49746 1.04292 8.42158L11.0429 0.239778C11.4336 -0.079926 12.0664 -0.079926 12.4569 0.239778C12.8474 0.559482 12.8476 1.07719 12.4569 1.39669L3.16391 9.00004L12.4569 16.6034C12.8476 16.9231 12.8476 17.4408 12.4569 17.7603C12.0661 18.0798 11.4334 18.08 11.0429 17.7603L1.04292 9.57849C0.949921 9.50261 0.876164 9.41245 0.825883 9.31318C0.775601 9.21391 0.749785 9.10749 0.749921 9.00004Z"
+                        fill="white" />
+                </svg>
+            </div>
+            <p class="number-page-table">1</p>
+            <div class="arrow-next">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="18" viewBox="0 0 13 18" fill="none">
+                    <path
+                        d="M12.7499 8.99996C12.7501 9.10742 12.7242 9.21384 12.674 9.31311C12.6237 9.41238 12.5499 9.50254 12.4569 9.57842L2.45697 17.7602C2.06623 18.0799 1.43348 18.0799 1.04298 17.7602C0.652483 17.4405 0.652233 16.9228 1.04298 16.6033L10.3359 8.99996L1.04298 1.39661C0.652233 1.07691 0.652233 0.559201 1.04298 0.239701C1.43373 -0.0797984 2.06647 -0.0800029 2.45697 0.239701L12.4569 8.42151C12.5499 8.49739 12.6237 8.58755 12.674 8.68682C12.7242 8.78609 12.7501 8.89251 12.7499 8.99996Z"
+                        fill="white" />
+                </svg>
+            </div>
+        </div>
+    </div>
+</body>
+
+<footer>
+    <div class="modal_window">
+        <div class="modal_window_content">
+            <div class="modal_window_img"></div>
+            <div class="modal_window_buttons">
+                <a download="dog.png" href="" target="_blank" class="button button_dwnld">Скачать</a>
+                <div class="button button_close">Закрыть</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sideBar" class="side-bar">
+        <div class="button button_close_sideBar">Закрыть</div>
+        <div class="user-posts"></div>
+    </div>
+</footer>
+
+<script src="js/table.js"></script>
+<script src="js/collage.js"></script>
