@@ -94,19 +94,31 @@ arrowPrev.addEventListener('click', event => {
     }
 });
 
-//Сортировка данных в таблице по полю
-const sort = (field) => displayUsersRows(parametrsSort[field]());
+//Сортировка чисел по возрастанию
+const sortByField = (field, a, b) => a[field] - b[field];
+//Сортировка строк по возрастанию
+const sortByFieldString = (field, a, b) => a[field].localeCompare(b[field]);
+//Сортировка даты по возрастанию
+const sortByFieldDate = (field, a, b) => new Date(a[field]) - new Date(b[field]);
+//Сортировка ip-адреса
+const sortByFieldIpAddress = (field, a, b) => {
+    const ipToNumber = ip => ip.split('.').reduce((acc, num, idx) => acc + parseInt(num) * Math.pow(256, 3 - idx), 0);
+    return ipToNumber(a[field]) - ipToNumber(b[field]);
+};
 
 //Параметры сортировки
 const parametrsSort = {
-    'id': function () { return usersData?.sort((a, b) => a.id - b.id) },
-    'username': function () { return usersData?.sort((a, b) => a.username.localeCompare(b.username)) },
-    'email': function () { return usersData?.sort((a, b) => a.email.localeCompare(b.email)) },
-    'fullName': function () { return usersData?.sort((a, b) => a.lastName.localeCompare(b.lastName)) },
-    'birthDate': function () { return usersData?.sort((a, b) => new Date(a.birthDate) - new Date(b.birthDate)) },
-    'height': function () { return usersData?.sort((a, b) => a.height - b.height) },
-    'ip': function () { return usersData?.sort((a, b) => parseFloat(a.ip) - parseFloat(b.ip)) },
-}
+    'id': (a, b) => sortByField('id', a, b),
+    'username': (a, b) => sortByFieldString('username', a, b),
+    'email': (a, b) => sortByFieldString('email', a, b),
+    'fullName': (a, b) => sortByFieldString('lastName', a, b),
+    'birthDate': (a, b) => sortByFieldDate('birthDate', a, b),
+    'height': (a, b) => sortByField('height', a, b),
+    'ip': (a, b) => sortByFieldIpAddress('ip', a, b),
+};
+
+//Сортировка
+const sort = (field) => displayUsersRows(usersData.sort((a, b) => parametrsSort[field](a, b)));
 
 /**
  * Получаем данные о постах пользователя по запросу, отбираем только те, которые нас интересуют по заданию.
@@ -114,6 +126,7 @@ const parametrsSort = {
  * @param id  - идентификатов пользователя
  */
 async function getUserPosts(id) {
+    console.log(`${urlUser}/${id}/posts`);
     await fetch(`${urlUser}/${id}/posts`)
         .then(response => response.json())
         .then(data => {
@@ -142,7 +155,6 @@ async function showSideBar(id) {
  * @param posts  - данные о пользователях
  */
 function displayUsersPosts(posts) {
-    postsPerUser.innerHTML = '';
     posts.forEach(post => {
         postsPerUser.innerHTML += `
             <div class="post-content">
@@ -156,6 +168,7 @@ function displayUsersPosts(posts) {
 // Скрытие боковой панели
 closeSideBar.addEventListener('click', event => {
     sideBar.classList.remove("active");
+    postsPerUser.innerHTML = '';
 });
 
 // Инициализация отображения на первой странице
