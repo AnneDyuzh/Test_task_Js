@@ -87,7 +87,7 @@ arrowNext.addEventListener('click', event => {
 и количество записей, которые нужно пропустить*/
 arrowPrev.addEventListener('click', event => {
     if (currentPageTable > 1) {
-        currentPage--;
+        currentPageTable--;
         pageTableNumber.innerText = (currentPageTable);
         skipRows -= limitRows;
         displayUsersPerPage(currentPageTable);
