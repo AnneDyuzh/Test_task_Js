@@ -4,15 +4,20 @@ let arrowNext = document.querySelector('.arrow-next');
 let arrowPrev = document.querySelector('.arrow-prev');
 let closeSideBar = document.querySelector('.button_close_sideBar');
 const urlUser = 'https://dummyjson.com/users';
-let limitRows = 20;
-let skipRows = 0;
-let usersData = []; // данные о пользователях
-let userPosts = []; // данные о пользователях
-let currentPageTable = 1;
-let totalUsers;
-let totalPagesTable;
+let limitRows = 20; // лимит записей о пользователях на странице таблицы
+let skipRows = 0; // количество записей, которые нужно пропустить при получении данных
+let usersData = []; // данные пользователей
+let userPosts = []; // данные о постах пользователя
+let currentPageTable = 1; //текущая страница таблицы
+let totalUsers; //общее количество пользователей
+let totalPagesTable; //общее количество страниц таблицы
 
 
+/* Получаем данные пользователей по запросу, отбираем только те, которые нас интересуют по заданию.
+skip - сколько записей требуется пропустить, limit - сколько записей требуется взять
+Также через запрос узнаем общее количество пользователей для подсчёта страниц
+Возращает список пользователей
+*/
 async function getUsersData() {
     await fetch(`${urlUser}?skip=${skipRows}&limit=${limitRows}`)
         .then(response => response.json())
@@ -32,6 +37,10 @@ async function getUsersData() {
     return usersData;
 };
 
+/**
+ * Функция для отображения данных пользователя в таблицу
+ * @param users - данные пользователей
+ */
 function displayUsersRows(users) {
     bodyTable.innerHTML = '';
     users.forEach(user => {
@@ -51,14 +60,20 @@ function displayUsersRows(users) {
     });
 };
 
-// Функция для отображения пользователей на каждой странице
+/**
+ * Функция для отображения пользователей на каждой странице
+ * @param page  - страница таблицы, на которой будут размещены данные
+ */
 async function displayUsersPerPage(page) {
+    //Фиксируется текущая страница
     currentPageTable = page;
     const usersPerData = await getUsersData();
     displayUsersRows(usersPerData);
     totalPagesTable = Math.ceil(totalUsers / limitRows);
 };
 
+/*Для перехода на следующую страницу, меняются значения текущей страницы 
+и количество записей, которые нужно пропустить*/
 arrowNext.addEventListener('click', event => {
     if (currentPageTable < totalPagesTable) {
         currentPageTable++;
@@ -68,6 +83,8 @@ arrowNext.addEventListener('click', event => {
     }
 });
 
+/*Для перехода на предыдущую страницу, меняются значения текущей страницы 
+и количество записей, которые нужно пропустить*/
 arrowPrev.addEventListener('click', event => {
     if (currentPageTable > 1) {
         currentPage--;
@@ -77,8 +94,10 @@ arrowPrev.addEventListener('click', event => {
     }
 });
 
+//Сортировка данных в таблице по полю
 const sort = (field) => displayUsersRows(parametrsSort[field]());
 
+//Параметры сортировки
 const parametrsSort = {
     'id': function () { return usersData?.sort((a, b) => a.id - b.id) },
     'username': function () { return usersData?.sort((a, b) => a.username.localeCompare(b.username)) },
@@ -89,6 +108,11 @@ const parametrsSort = {
     'ip': function () { return usersData?.sort((a, b) => parseFloat(a.ip) - parseFloat(b.ip)) },
 }
 
+/**
+ * Получаем данные о постах пользователя по запросу, отбираем только те, которые нас интересуют по заданию.
+ * Возращает список постов
+ * @param id  - идентификатов пользователя
+ */
 async function getUserPosts(id) {
     await fetch(`${urlUser}/${id}/posts`)
         .then(response => response.json())
@@ -101,6 +125,10 @@ async function getUserPosts(id) {
     return userPosts;
 };
 
+/**
+ * Функция для отображения боковой панели и получения списка постов для дальнейшего отображения
+ * @param id  - идентификатор пользователя, по которому достаются посты 
+ */
 async function showSideBar(id) {
     const perUserPosts = await getUserPosts(id);
     displayUsersPosts(perUserPosts);
@@ -109,6 +137,10 @@ async function showSideBar(id) {
     console.log(perUserPosts);
 }
 
+/**
+ * Функция для отображения постов пользователя
+ * @param posts  - данные о пользователях
+ */
 function displayUsersPosts(posts) {
     postsPerUser.innerHTML = '';
     posts.forEach(post => {
@@ -121,6 +153,7 @@ function displayUsersPosts(posts) {
     });
 }
 
+// Скрытие боковой панели
 closeSideBar.addEventListener('click', event => {
     sideBar.classList.remove("active");
 });
